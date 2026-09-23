@@ -17,7 +17,7 @@ Key Features:
 - Standard OpenVPN protocol with an encrypted tunnel
 - DNS routed inside the tunnel to prevent DNS leaks
 - IPv6 leak protection
-- No ads, no trackers, no analytics SDKs. The only services the app contacts are the server-list mirror, the VPN servers themselves, and Expo's update service.
+- No ads, no trackers, no analytics. The app contacts only the server-list mirror (with vpngate.net as a fallback) and the VPN servers themselves.
 
 PLEASE READ BEFORE INSTALLING
 

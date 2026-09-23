@@ -1,8 +1,9 @@
 # ShieldVPN — release runbook
 
-This app is already on Google Play (package `com.shieldvpn.app`). Latest upload
-as of 11 Jun 2026: **1.0.3 / versionCode 4** on internal testing, with 1.0 in
-closed alpha. This release is **1.0.4 / versionCode 5**.
+This app is already on Google Play (package `com.shieldvpn.app`). 1.0.4 /
+versionCode 5 was uploaded to Closed testing (Alpha) on 23 Sep 2026 but never
+sent for review; it still contained the Expo update check. This release is
+**1.0.5 / versionCode 6**, which replaces it in the same Alpha release.
 
 Builds are made **locally** and signed with the app's existing upload key. No
 Expo account is needed for that. EAS is documented at the end as an optional
@@ -25,7 +26,8 @@ alternative.
    were signed by another key (probably one stored in Expo) — do not upload;
    either use that key or request an upload-key reset under App signing.
 
-2. **Publish the source.** The GPL obligation that comes with the bundled
+2. **Publish the source.** *(Done 23 Sep 2026: https://github.com/alij93695/shieldvpn,
+   native sources attached to each release.)* The GPL obligation that comes with the bundled
    OpenVPN code is met by an offer of source that points at
    `https://github.com/alij93695/shieldvpn`. That repository must exist and be
    public **before** the release goes out, or the offer is false. If your GitHub
@@ -43,7 +45,8 @@ alternative.
    `native-sources/ics-openvpn-v0.7.60-with-submodules.tar.gz`. Attach that file
    to the GitHub release for this version. Details in `NATIVE_SOURCES.md`.
 
-3. **Host the privacy policy.** In that repo, Settings → Pages → Source: branch
+3. **Host the privacy policy.** *(Done: https://alij93695.github.io/shieldvpn/,
+   set in Play Console.)* In that repo, Settings → Pages → Source: branch
    `main`, folder `/docs`. `docs/index.html` is generated from
    `privacy_policy.txt`. Put the resulting URL (for example
    `https://alij93695.github.io/shieldvpn/`) in the Play Console privacy-policy
@@ -113,11 +116,11 @@ Versioning is local (`eas.json` → `cli.appVersionSource: "local"`), set in
 `app.json`:
 
 ```json
-"version": "1.0.4",
-"android": { "versionCode": 5 }
+"version": "1.0.5",
+"android": { "versionCode": 6 }
 ```
 
-Every release: increase `android.versionCode` by one (next is **6**), set a
+Every release: increase `android.versionCode` by one (next is **7**), set a
 matching `version`, then run prebuild. Play rejects a reused versionCode. A
 locally built 1.1.3 / versionCode 14 exists in the older checkout but was never
 uploaded, so it does not affect Play.
@@ -131,15 +134,18 @@ uploaded, so it does not affect Play.
 2. **Foreground service types**: declare `specialUse`. Reuse the justification in
    `plugins/withOpenVPN.js`. Attach a short screen recording: tap Connect →
    Android's VPN consent dialog → the persistent notification.
-3. **Data safety**: no backend, no accounts, encryption in transit. Disclose, in
-   line with `privacy_policy.txt`: traffic transits third-party VPN Gate volunteer
-   servers that may log connection metadata; the app contacts the GitHub/jsDelivr
-   mirror for the server list, contacts candidate VPN servers directly to time
-   them, and checks `u.expo.dev` for updates — each sees the device IP. The
-   update check also sends Expo a random per-install identifier, which the
-   Data safety form treats as *Device or other IDs* shared with a third party
-   (purpose: app functionality — delivering updates). It is sent only after the
-   user accepts the in-app disclosure.
+3. **Data safety**: "Does your app collect or share any of the required user
+   data types?" **No.** From 1.0.5 the app has no update checker, analytics, ads
+   or crash reporting, and no backend or accounts. Its only requests of its own
+   are the server-list download (GitHub/jsDelivr, fallback vpngate.net) and the
+   connection checks against candidate VPN servers. Neither carries an
+   identifier, and Play has no IP-address data type unless the IP is used, for
+   example to infer location. Traffic the user sends through the VPN goes to the
+   volunteer server they chose. The developer never receives it, and the
+   in-app disclosure and `privacy_policy.txt` say that operators may log it.
+   **If you ever add an SDK that sends data off the device** (expo-updates sends
+   a per-install `EAS-Client-ID`, for example), declare it here and in the
+   disclosure *before* releasing.
 4. **Privacy policy URL** from step 3 above.
 5. **App access**: no login. Note that on networks that block VPN services the
    app will report that no server answered.
@@ -165,25 +171,15 @@ are out of date.
 
 ---
 
-## Over-the-air updates (optional, needs an Expo login)
+## Over-the-air updates (removed in 1.0.5)
 
-`expo-updates` is installed with the `fingerprint` runtime policy, and builds
-request the `production` channel. JS-only fixes can be shipped without a Play
-review:
-
-```bash
-npx eas-cli@latest login --no-browser
-npx eas-cli@latest update --channel production --message "..."
-```
-
-An update only reaches builds whose native fingerprint matches, so any change to
-native code or dependencies still needs a new Play release. If you would rather
-not use OTA at all, remove `expo-updates` and its `updates` block in `app.json`,
-and remove the update-check paragraph from `privacy_policy.txt`.
-
-`--no-browser` logs in inside the terminal instead of through a browser window,
-which avoids the redirect problem seen when the sign-in page opens in the
-Claude browser pane.
+1.0.5 removed `expo-updates`. Each update check sent Expo a persistent
+per-install ID, and publishing an update needed an Expo login. Updates now come
+only through Play. To bring OTA back, `npx expo install expo-updates`, restore
+the `updates` and `runtimeVersion` blocks in `app.json`, check for updates only
+after consent, and declare *Device or other IDs* (collected, not shared, App
+functionality) in Data safety. Also update the consent screen and
+`privacy_policy.txt`, because both currently say the app collects nothing.
 
 ---
 

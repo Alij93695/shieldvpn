@@ -2,7 +2,7 @@
   "expo": {
     "name": "ShieldVPN",
     "slug": "shieldvpn-mobile",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "shieldvpnmobile",
@@ -13,7 +13,7 @@
     },
     "android": {
       "package": "com.shieldvpn.app",
-      "versionCode": 5,
+      "versionCode": 6,
       "adaptiveIcon": {
         "backgroundColor": "#000614",
         "foregroundImage": "./assets/images/android-icon-foreground.png"
@@ -59,16 +59,6 @@
         "projectId": "c2e92793-8ff6-4e94-be15-edb2f7a2d381"
       }
     },
-    "owner": "alij93695",
-    "runtimeVersion": {
-      "policy": "fingerprint"
-    },
-    "updates": {
-      "url": "https://u.expo.dev/c2e92793-8ff6-4e94-be15-edb2f7a2d381",
-      "requestHeaders": {
-        "expo-channel-name": "production"
-      },
-      "checkAutomatically": "NEVER"
-    }
+    "owner": "alij93695"
   }
 }

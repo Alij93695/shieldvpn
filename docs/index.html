@@ -33,11 +33,11 @@
   <li>Your IP address or DNS queries (except as the network requests below necessarily reveal it)</li>
   <li>Any personally identifying information</li>
 </ul>
-<p>The app stores your selected region on your own device only. There is no ShieldVPN server to send anything to.</p>
-<p>The app makes three kinds of network request on its own behalf. Like any web request, each one reveals your IP address to the host it contacts. None carries personal information, and all of them happen outside the VPN tunnel.</p>
+<p>The only thing the app saves is whether you have accepted its disclosure, and it saves that on your own device. Your selected region never leaves the device. There is no ShieldVPN server to send anything to.</p>
+<p>The app makes two kinds of network request on its own behalf. Like any web request, each one reveals your IP address to the host it contacts. Neither carries personal information or any identifier. They normally happen before the tunnel is up; if the VPN is already connected, they travel through it.</p>
 <p>Server list: the app downloads the server directory from a public community mirror hosted on GitHub (raw.githubusercontent.com, with jsDelivr as a fallback), falling back to vpngate.net. The request carries no identifier.</p>
 <p>Server checks: when you tap Connect, the app contacts a sample of candidate VPN servers directly (up to about 50 at a time) to measure which ones are reachable and fastest from your network. Each check opens a connection to the server and closes it without logging in or sending any of your data. The operators of those servers can see that your IP address connected.</p>
-<p>Update checks: once per launch, and only after you have accepted the disclosure, the app asks Expo's update service (u.expo.dev) whether a new version is available. That request carries a random installation identifier along with your platform and app version, and is handled under Expo's privacy policy.</p>
+<p>The app contains no analytics, advertising, crash-reporting or update-checking services. App updates are delivered only through Google Play.</p>
 <h2>3. Third-Party VPN Servers (Important)</h2>
 <p>ShieldVPN does not run its own VPN infrastructure. It connects you to free, volunteer-run servers published by the VPNGate project, an academic experiment operated by the University of Tsukuba, Japan (<a href="https://www.vpngate.net/">https://www.vpngate.net/</a>).</p>
 <p>This means:</p>
@@ -49,7 +49,7 @@
 <p>ShieldVPN therefore CANNOT and DOES NOT promise a &quot;no-logs&quot; VPN service. Any such claim would be false. Do not use ShieldVPN for traffic where interception by an unknown third party would harm you.</p>
 <p>Always use HTTPS. A VPN tunnel protects traffic between your device and the volunteer server; it does not protect traffic beyond that server.</p>
 <h2>4. DNS</h2>
-<p>By default the app directs DNS queries inside the tunnel to public resolvers (Cloudflare 1.1.1.1 and Google 8.8.8.8). Those providers operate under their own privacy policies.</p>
+<p>While you are connected, the app directs DNS queries inside the tunnel to public resolvers (Cloudflare 1.1.1.1 and Google 8.8.8.8), and Android may also use any DNS server that the VPN server provides. The VPN server's operator can see these lookups; public resolvers see the VPN server's address rather than yours. Those providers operate under their own privacy policies.</p>
 <h2>5. Permissions</h2>
 <ul>
   <li>VPN (BIND_VPN_SERVICE): required to create the encrypted tunnel.</li>

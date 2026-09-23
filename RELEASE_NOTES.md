@@ -1,8 +1,14 @@
 # Release notes
 
-## 1.0.4 (Build 5) — Connection Fixes & Global Servers
+## 1.0.5 (Build 6) — Connection Fixes & Global Servers
 
 Following the naming used for 1.0.3 (Build 4).
+
+1.0.5 is 1.0.4 (Build 5) with the Expo over-the-air update check removed, so
+the app sends nothing to Expo and no per-install identifier leaves the device.
+The consent screen and privacy policy now also say where DNS lookups go. Build
+5 was uploaded to Closed testing but never sent for review, so users go
+straight from 1.0.3 to 1.0.5, and the notes below cover everything since 1.0.3.
 
 ### Play Console "What's new"
 
@@ -79,14 +85,15 @@ permissions removed: `SYSTEM_ALERT_WINDOW`,
 
 | Version | Build | Track | Date |
 | --- | --- | --- | --- |
-| 1.0.4 | 5 | (this release) | — |
+| 1.0.5 | 6 | (this release) | — |
+| 1.0.4 | 5 | Closed testing – Alpha (uploaded, never reviewed; replaced by 6) | 23 Sep 2026 |
 | 1.0.3 | 4 | Internal testing | 11 Jun 2026 |
 | 1.0.2 | 3 | — | 10 Jun 2026 |
 | 1.0.1 | 2 | — | 10 Jun 2026 |
 | 1.0.0 | 1 | Closed testing – Alpha | 10 Jun 2026 |
 
 A locally built 1.1.3 / versionCode 14 exists in the older checkout but was
-never uploaded; Play only knows versionCodes 1–4, so 5 is correct.
+never uploaded; Play knows versionCodes 1–5, so 6 is correct.
 
-Next release is **versionCode 6**: bump `android.versionCode` in `app.json`,
+Next release is **versionCode 7**: bump `android.versionCode` in `app.json`,
 then run `npx expo prebuild -p android` so the change reaches the native project.

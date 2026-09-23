@@ -14,7 +14,6 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { PrivacyPolicyModal } from '@/components/privacy-policy-modal';
-import { checkForAppUpdateOnce } from '@/lib/app-updates';
 
 /**
  * Prominent disclosure and consent gate.
@@ -44,11 +43,6 @@ export function ConsentGate({ children }: Props) {
       .then((value) => setAccepted(value === 'true'))
       .catch(() => setAccepted(false));
   }, []);
-
-  // The update check contacts Expo, so it waits for consent like everything else.
-  useEffect(() => {
-    if (accepted) checkForAppUpdateOnce();
-  }, [accepted]);
 
   const accept = useCallback(() => {
     setAccepted(true);
@@ -121,10 +115,16 @@ export function ConsentGate({ children }: Props) {
               </Bullet>
               <Bullet>
                 What the app does contact, so you hear it from us: a public
-                mirror on GitHub for the server list; a sample of candidate VPN
-                servers, briefly, to find the fastest one when you tap Connect;
-                and Expo&rsquo;s service to check for app updates. Each of
-                these sees your IP address. None carries personal information.
+                mirror on GitHub for the server list (vpngate.net if the mirror
+                is unreachable), and a sample of candidate VPN servers, briefly,
+                to find the fastest one when you tap Connect. Each of these sees
+                your IP address. None carries personal information.
+              </Bullet>
+              <Bullet>
+                While you are connected, your DNS lookups go through the VPN
+                server to Cloudflare (1.1.1.1), Google (8.8.8.8), and any DNS
+                server the VPN server itself provides. The VPN server&rsquo;s
+                operator can see them.
               </Bullet>
             </View>
 
