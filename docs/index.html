@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShieldVPN Privacy Policy</title>
+<!-- GENERATED from privacy_policy.txt by scripts/build-privacy-policy.js. Do not edit by hand. -->
+<style>
+  :root { color-scheme: light dark; }
+  body { max-width: 46rem; margin: 0 auto; padding: 2rem 1.25rem 5rem;
+         font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+         color: #1f2937; background: #fff; }
+  @media (prefers-color-scheme: dark) { body { color: #e5e7eb; background: #111; } a { color: #93c5fd; } }
+  h1 { font-size: 1.85rem; margin-bottom: .25rem; }
+  h2 { font-size: 1.1rem; margin-top: 2.25rem; }
+  .meta { color: #6b7280; margin: .15rem 0; font-size: .92rem; }
+  ul { padding-left: 1.2rem; }
+  li { margin: .35rem 0; }
+</style>
+</head>
+<body>
+<h1>Privacy Policy for ShieldVPN</h1>
+<p class="meta">Effective Date: 23 September 2026</p>
+<p class="meta">Last Updated: 23 September 2026</p>
+<h2>1. Introduction</h2>
+<p>ShieldVPN (&quot;the app&quot;) is a free VPN client for Android that uses the OpenVPN protocol. This policy explains what the app does with your information, and — just as importantly — what it cannot control.</p>
+<p>Please read section 3 carefully. ShieldVPN does not operate its own VPN servers.</p>
+<h2>2. Information ShieldVPN Collects</h2>
+<p>ShieldVPN does not operate any backend servers and does not have user accounts. The app does not collect, store, or transmit:</p>
+<ul>
+  <li>Your browsing history</li>
+  <li>The contents of your traffic</li>
+  <li>Your IP address or DNS queries (except as the network requests below necessarily reveal it)</li>
+  <li>Any personally identifying information</li>
+</ul>
+<p>The app stores your selected region on your own device only. There is no ShieldVPN server to send anything to.</p>
+<p>The app makes three kinds of network request on its own behalf. Like any web request, each one reveals your IP address to the host it contacts. None carries personal information, and all of them happen outside the VPN tunnel.</p>
+<p>Server list: the app downloads the server directory from a public community mirror hosted on GitHub (raw.githubusercontent.com, with jsDelivr as a fallback), falling back to vpngate.net. The request carries no identifier.</p>
+<p>Server checks: when you tap Connect, the app contacts a sample of candidate VPN servers directly (up to about 50 at a time) to measure which ones are reachable and fastest from your network. Each check opens a connection to the server and closes it without logging in or sending any of your data. The operators of those servers can see that your IP address connected.</p>
+<p>Update checks: once per launch, and only after you have accepted the disclosure, the app asks Expo's update service (u.expo.dev) whether a new version is available. That request carries a random installation identifier along with your platform and app version, and is handled under Expo's privacy policy.</p>
+<h2>3. Third-Party VPN Servers (Important)</h2>
+<p>ShieldVPN does not run its own VPN infrastructure. It connects you to free, volunteer-run servers published by the VPNGate project, an academic experiment operated by the University of Tsukuba, Japan (<a href="https://www.vpngate.net/">https://www.vpngate.net/</a>).</p>
+<p>This means:</p>
+<ul>
+  <li>Your traffic is carried by volunteer server operators who are unknown to us and whom we do not control, audit, or have any agreement with.</li>
+  <li>The VPNGate project states that it retains connection logs (including source IP addresses and connection timestamps) for a period of time, and that logs may be disclosed to authorities where legally required. See VPNGate's own policy for current details.</li>
+  <li>Individual volunteer operators may independently log or inspect traffic passing through their servers.</li>
+</ul>
+<p>ShieldVPN therefore CANNOT and DOES NOT promise a &quot;no-logs&quot; VPN service. Any such claim would be false. Do not use ShieldVPN for traffic where interception by an unknown third party would harm you.</p>
+<p>Always use HTTPS. A VPN tunnel protects traffic between your device and the volunteer server; it does not protect traffic beyond that server.</p>
+<h2>4. DNS</h2>
+<p>By default the app directs DNS queries inside the tunnel to public resolvers (Cloudflare 1.1.1.1 and Google 8.8.8.8). Those providers operate under their own privacy policies.</p>
+<h2>5. Permissions</h2>
+<ul>
+  <li>VPN (BIND_VPN_SERVICE): required to create the encrypted tunnel.</li>
+  <li>Notifications: required by Android to show the ongoing connection status while the VPN is active.</li>
+  <li>Network state: required to detect connectivity changes and reconnect.</li>
+</ul>
+<h2>6. Encryption</h2>
+<p>Connections use the OpenVPN protocol. Because the app connects to community servers, the available cipher suites are determined by each server operator and may include older configurations.</p>
+<h2>7. Children</h2>
+<p>ShieldVPN is not directed at children under 13 and does not knowingly collect information from them.</p>
+<h2>8. Changes</h2>
+<p>This policy may be updated. Material changes will be reflected by the &quot;Last Updated&quot; date above.</p>
+<h2>9. Contact</h2>
+<p><a href="mailto:alij93695@gmail.com">alij93695@gmail.com</a></p>
+</body>
+</html>

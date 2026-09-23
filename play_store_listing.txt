@@ -1,0 +1,47 @@
+App Name: ShieldVPN - VPN Client
+
+Short Description:
+Client for the volunteer-run VPNGate network. One tap, servers worldwide.
+
+Full Description:
+ShieldVPN is a free, no-account VPN client for Android. It connects you to the public VPNGate network — thousands of volunteer-run servers around the world, published by an academic project at the University of Tsukuba, Japan.
+
+Tap once. ShieldVPN times a sample of well-rated servers from your own phone, skips the ones that do not answer, and connects you to the fastest — falling back automatically if a community server is busy or offline.
+
+Key Features:
+- One-tap connect, no sign-up, no account, no subscription
+- Thousands of servers across about 70 countries
+- Automatic mode times servers from your phone and picks the fastest
+- Servers that do not answer from your network are skipped, not dialled
+- Automatic fallback: if a free server is overloaded, the app tries the next best one
+- Standard OpenVPN protocol with an encrypted tunnel
+- DNS routed inside the tunnel to prevent DNS leaks
+- IPv6 leak protection
+- No ads, no trackers, no analytics SDKs. The only services the app contacts are the server-list mirror, the VPN servers themselves, and Expo's update service.
+
+PLEASE READ BEFORE INSTALLING
+
+ShieldVPN does not operate its own VPN servers. It is a client for the free, public VPNGate network. Your traffic is carried by volunteer operators who we do not control or audit.
+
+The server directory is loaded from a public community mirror on GitHub, which also works on networks where vpngate.net itself is blocked.
+
+The VPNGate project keeps connection logs and may disclose them where legally required, and individual volunteer operators may keep their own logs. ShieldVPN therefore cannot offer a "no-logs" guarantee, and we will not pretend otherwise.
+
+Use ShieldVPN to reach a network from a different location and to protect traffic on untrusted Wi-Fi. Always use HTTPS. Do not use it for traffic where interception by an unknown third party would put you at risk.
+
+Free community servers vary in speed and availability. They are shared by many people and performance is not guaranteed.
+
+OPEN SOURCE
+
+ShieldVPN is free software. It includes ics-openvpn and OpenVPN, which are licensed under the GNU General Public License version 2, so ShieldVPN is released under the GPL version 2 as well.
+
+The complete corresponding source code, including the source of the bundled native libraries (ics-openvpn v0.7.60 with OpenVPN 2, OpenVPN 3 Core, OpenSSL, LZO and LZ4), is available at: https://github.com/alij93695/shieldvpn
+
+For at least three years, anyone may also request a copy of the complete corresponding source by emailing alij93695@gmail.com.
+
+Full attribution and the complete licence texts are also available inside the app, under "Open source & source code".
+
+"OpenVPN" is a registered trademark of OpenVPN Inc. ShieldVPN is not affiliated with, endorsed by, or sponsored by OpenVPN Inc., the VPN Gate project, or the University of Tsukuba.
+
+Privacy Policy: [INSERT PUBLIC URL TO YOUR HOSTED PRIVACY POLICY]
+Support: alij93695@gmail.com

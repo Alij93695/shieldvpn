@@ -1,0 +1,32 @@
+# EAS Build uploads the project with Continuous Native Generation: the native
+# folders are regenerated remotely from app.json + plugins/withOpenVPN.js.
+# Uploading a stale android/ would make EAS SKIP prebuild, silently dropping the
+# OpenVPN service declarations the tunnel needs.
+/android
+/ios
+
+node_modules/
+.expo/
+dist/
+web-build/
+*.apk
+*.aab
+*.keystore
+*.jks
+play-service-account.json
+
+# Release signing: never commit keys or their passwords
+*.keystore
+keystore.properties
+play-service-account.json
+
+# Environment files can hold secrets
+.env
+.env.*
+!.env.example
+
+# Large native source archive for GPL publication (see NATIVE_SOURCES.md)
+native-sources/
+
+# Built release files
+release-output/

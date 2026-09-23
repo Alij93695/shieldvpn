@@ -1,0 +1,146 @@
+diff --git a/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/com/openvpn/OpenvpnModule.kt b/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/com/openvpn/OpenvpnModule.kt
+index 5a21512..39a74c1 100644
+--- a/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/com/openvpn/OpenvpnModule.kt
++++ b/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/com/openvpn/OpenvpnModule.kt
+@@ -175,6 +175,7 @@ class OpenvpnModule(reactContext: ReactApplicationContext) :
+    */
+   private var profileToConnectAfterPrepare: VpnProfile? = null
+   override fun connect(params: ReadableMap?, promise: Promise?) {
++    StopSignal.userRequestedStop = false // ShieldVPN: never carry a stale stop into a new connection
+     try {
+ 
+       val address: String = params?.getString("address").toString()
+@@ -291,7 +292,13 @@ class OpenvpnModule(reactContext: ReactApplicationContext) :
+     Intent: Intent?
+   ) {
+     val params: WritableMap = Arguments.createMap()
+-    params.putString("state", translateVPNState(level!!))
++    val translated = translateVPNState(level!!)
++    params.putString("state", translated)
++    // ShieldVPN: mark a disconnect the user asked for from the notification.
++    if (translated == VpnState.VPN_STATE_DISCONNECTED.value && StopSignal.userRequestedStop) {
++      StopSignal.userRequestedStop = false
++      params.putBoolean("userInitiated", true)
++    }
+     sendEvent(EVENT_NAME, params)
+   }
+ 
+@@ -586,7 +593,7 @@ class OpenvpnModule(reactContext: ReactApplicationContext) :
+    * VPN PREPARE RELATED
+    */
+ 
+-  override fun onActivityResult(p0: Activity?, requestCode: Int, resultCode: Int, p3: Intent?) {
++  override fun onActivityResult(p0: Activity, requestCode: Int, resultCode: Int, p3: Intent?) {
+     if (requestCode == PREPARE_VPN_PROFILE) {
+       if (preparePromise != null) {
+         if (resultCode == RESULT_OK) {
+@@ -602,7 +609,7 @@ class OpenvpnModule(reactContext: ReactApplicationContext) :
+     }
+   }
+ 
+-  override fun onNewIntent(p0: Intent?) {
++  override fun onNewIntent(p0: Intent) {
+   }
+ 
+   private fun enableStrictModes() {
+diff --git a/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/com/openvpn/StopSignal.java b/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/com/openvpn/StopSignal.java
+new file mode 100644
+index 0000000..d22a749
+--- /dev/null
++++ b/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/com/openvpn/StopSignal.java
+@@ -0,0 +1,16 @@
++package com.openvpn;
++
++/**
++ * ShieldVPN: set by DisconnectVPN when the user stops the VPN from the
++ * notification, so OpenvpnModule can mark the next DISCONNECTED event as
++ * user-initiated. Without it JS cannot tell a user stop from a server dropping
++ * and would dial the next server.
++ *
++ * A plain holder rather than a field on OpenvpnModule, because that class is
++ * annotated @RequiresApi(O) while the app supports API 24.
++ */
++public final class StopSignal {
++    public static volatile boolean userRequestedStop = false;
++
++    private StopSignal() {}
++}
+diff --git a/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/de/blinkt/openvpn/LaunchVPN.java b/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/de/blinkt/openvpn/LaunchVPN.java
+index 7700982..2d43487 100644
+--- a/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/de/blinkt/openvpn/LaunchVPN.java
++++ b/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/de/blinkt/openvpn/LaunchVPN.java
+@@ -273,12 +273,9 @@ public class LaunchVPN extends Activity {
+     }
+ 
+     void showLogWindow() {
+-
+-        Intent startLW = new Intent();
+-        startLW.setComponent(new ComponentName(this, getPackageName() + ".activities.LogWindow"));
+-        startLW.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+-        startActivity(startLW);
+-
++        // ShieldVPN: the LogWindow activity does not exist in this library, so
++        // starting it threw ActivityNotFoundException (e.g. from the Reconnect
++        // button in the disconnect dialog). Intentionally a no-op.
+     }
+ 
+     void showConfigErrorDialog(int vpnok) {
+diff --git a/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/de/blinkt/openvpn/activities/DisconnectVPN.java b/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/de/blinkt/openvpn/activities/DisconnectVPN.java
+index 3162e08..f775164 100644
+--- a/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/de/blinkt/openvpn/activities/DisconnectVPN.java
++++ b/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/de/blinkt/openvpn/activities/DisconnectVPN.java
+@@ -41,6 +41,7 @@ public class DisconnectVPN extends Activity implements DialogInterface.OnClickLi
+             mService = IOpenVPNServiceInternal.Stub.asInterface(service);
+             if (disconnectPending) {
+                 try {
++                    com.openvpn.StopSignal.userRequestedStop = true; // ShieldVPN
+                     mService.stopVPN(false);
+                 } catch (RemoteException e) {
+                     VpnStatus.logException(e);
+@@ -95,6 +96,7 @@ public class DisconnectVPN extends Activity implements DialogInterface.OnClickLi
+             ProfileManager.setConntectedVpnProfileDisconnected(this);
+             if (mService != null) {
+                 try {
++                    com.openvpn.StopSignal.userRequestedStop = true; // ShieldVPN
+                     mService.stopVPN(false);
+                 } catch (RemoteException e) {
+                     VpnStatus.logException(e);
+diff --git a/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/de/blinkt/openvpn/core/OpenVPNService.java b/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/de/blinkt/openvpn/core/OpenVPNService.java
+index 5cb7191..c78d9e5 100644
+--- a/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/de/blinkt/openvpn/core/OpenVPNService.java
++++ b/node_modules/@aliakhgar1/react-native-openvpn/android/src/main/java/de/blinkt/openvpn/core/OpenVPNService.java
+@@ -499,7 +499,10 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
+ 
+         //AUDIT
+         if(NotificationData.getBoolean(NotificationBundle.SHOW_DISCONNECT)){
+-          if(!Objects.requireNonNull(NotificationData.getString(NotificationBundle.TITLE_ACTION_DISCONNECT)).isEmpty()){
++          // ShieldVPN: was Objects.requireNonNull(...), which crashed the service
++          // whenever the app did not pass titleDisconnectButton.
++          String disconnectTitle = NotificationData.getString(NotificationBundle.TITLE_ACTION_DISCONNECT);
++          if(disconnectTitle != null && !disconnectTitle.isEmpty()){
+             nbuilder.addAction(R.drawable.ic_menu_close_clear_cancel,
+               NotificationData.getString(NotificationBundle.TITLE_ACTION_DISCONNECT), disconnectPendingIntent);
+           }else{
+@@ -609,7 +612,10 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
+             mNotificationAlwaysVisible = true;
+ 
+         if(intent!=null){
+-          NotificationData = intent.getBundleExtra(NotificationBundle.BUNDLE_KEY);
++          // ShieldVPN: a start intent without the bundle (always-on VPN, a
++          // system restart) must not null the settings used by showNotification.
++          Bundle incomingNotificationData = intent.getBundleExtra(NotificationBundle.BUNDLE_KEY);
++          if (incomingNotificationData != null) NotificationData = incomingNotificationData;
+         }
+ 
+         VpnStatus.addStateListener(this);
+@@ -773,7 +779,9 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
+         mProfile = vp;
+         ProfileManager.setConnectedVpnProfile(this, vp);
+         VpnStatus.setConnectedVPNProfile(vp.getUUIDString());
+-        keepVPNAlive.scheduleKeepVPNAliveJobService(this, vp);
++        // ShieldVPN: removed keepVPNAlive.scheduleKeepVPNAliveJobService(this, vp).
++        // It schedules a persisted job for a JobService the library never
++        // declares, so JobScheduler threw on every connect and killed the service.
+ 
+         String nativeLibraryDirectory = getApplicationInfo().nativeLibraryDir;
+         String tmpDir;

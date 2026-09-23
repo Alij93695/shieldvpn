@@ -1,0 +1,74 @@
+{
+  "expo": {
+    "name": "ShieldVPN",
+    "slug": "shieldvpn-mobile",
+    "version": "1.0.4",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "shieldvpnmobile",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "icon": "./assets/expo.icon",
+      "bundleIdentifier": "com.shieldvpn.app"
+    },
+    "android": {
+      "package": "com.shieldvpn.app",
+      "versionCode": 5,
+      "adaptiveIcon": {
+        "backgroundColor": "#000614",
+        "foregroundImage": "./assets/images/android-icon-foreground.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "blockedPermissions": [
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.VIBRATE",
+        "android.permission.RECEIVE_BOOT_COMPLETED"
+      ],
+      "allowBackup": false
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "./plugins/withOpenVPN",
+      "./plugins/withReleaseSigning",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#000614",
+          "android": {
+            "image": "./assets/images/splash-icon.png",
+            "imageWidth": 200
+          }
+        }
+      ],
+      "expo-image",
+      "expo-web-browser"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "c2e92793-8ff6-4e94-be15-edb2f7a2d381"
+      }
+    },
+    "owner": "alij93695",
+    "runtimeVersion": {
+      "policy": "fingerprint"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/c2e92793-8ff6-4e94-be15-edb2f7a2d381",
+      "requestHeaders": {
+        "expo-channel-name": "production"
+      },
+      "checkAutomatically": "NEVER"
+    }
+  }
+}
